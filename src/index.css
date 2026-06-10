@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    color: #1C1C1C;
+    background-color: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  /* Clean scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #FFFFFF; }
+  ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #cbe465; }
+
+  /* Hide scrollbar for carousel */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Form Radio Card Styles */
+  .radio-card:checked + div {
+    border-color: #cbe465;
+    background-color: #f5f9e8;
+  }
+  .radio-card:checked + div .radio-dot {
+    opacity: 1;
+  }
+}
