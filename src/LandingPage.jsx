@@ -29,10 +29,56 @@ import {
     FileCheck,
 } from "lucide-react";
 import fgiitLogo from "./assets/fgiit_logo.png";
-import heroImage from "./assets/hero.jpeg";
+import heroImage from "./assets/hero.jpg";
 import toast, { Toaster } from "react-hot-toast";
 import { publicAxiosInstance } from "./config/api";
 import apiConfig from "./config/apiConfig";
+
+import nishaImg from "./assets/nisha.webp";
+import pritiImg from "./assets/priti.webp";
+import vipinImg from "./assets/vipin-kumar.webp";
+import pragneshImg from "./assets/pragnesh.webp";
+import grupreetImg from "./assets/grupreet.webp";
+import ripulImg from "./assets/ripul-gaba.webp";
+import abhijeetImg from "./assets/abhijeet.webp";
+
+const reviews = [
+    {
+        text: "Its A Great Experience To Learn Nutrition With FGIIT. Easy Teaching Patterns, Co-Operative Faculties, This Certified Nutritionist Course Help Me Lots In My Career Graph.. Thnx To FGIIT.",
+        img: nishaImg,
+        name: "Nisha Jariwala",
+    },
+    {
+        text: "I Am So Much Happy That After 25 Years I Did Something New And Good.At This Moment I Appreciate FGIIT For Provide Me Best Coaching Best Support And Best Friends Also.Thanks Gautam.",
+        img: pritiImg,
+        name: "Priti Jani",
+    },
+    {
+        text: "FGIIT is one of best institution in india. Just because of there Training skill, individually Doubt Clearance and well Knowledgeable teachers. If anyone is looking for Fitness related course...",
+        img: vipinImg,
+        name: "Vipin Kumar",
+    },
+    {
+        text: "Without Your Guidance I Never Been A Good Nutritionist Thanks A Lot For Sharing Knowledge With Us.",
+        img: pragneshImg,
+        name: "Maisuria Pragnesh",
+    },
+    {
+        text: "Awesome excellent amazing study coordinator and study module am happy for value for money return every single single Myth clear.",
+        img: grupreetImg,
+        name: "Gurpreet Sidhu",
+    },
+    {
+        text: "Firstly I want to thank you Gautam sir and his team It's a great time and I am happy to enrol myself in FGIIT institute and I have been gained a lot of knowledge from them all teachers specially...",
+        img: ripulImg,
+        name: "Ripul Gabba",
+    },
+    {
+        text: "knowledgeable n very informative course (AAS). Thank u so much FGIIT Gautam sir n other facilities…🙏🏻🙏🏻",
+        img: abhijeetImg,
+        name: "Abhijeet",
+    },
+];
 
 export default function LandingPage() {
     const [scrolled, setScrolled] = useState(false);
@@ -330,8 +376,8 @@ export default function LandingPage() {
                                     alt="Fitness instructor demonstrating exercise"
                                     className="object-cover w-full h-full"
                                     onError={(e) =>
-                                        (e.target.src =
-                                            "https://placehold.co/1200x1200/F8FCF9/1C1C1C?text=Professional+Learning+Environment")
+                                    (e.target.src =
+                                        "https://placehold.co/1200x1200/F8FCF9/1C1C1C?text=Professional+Learning+Environment")
                                     }
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-tr from-brand-primary/20 to-transparent"></div>
@@ -755,161 +801,39 @@ export default function LandingPage() {
                         ref={carouselRef}
                         className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory hide-scrollbar px-2 sm:px-4"
                     >
-                        <div className="w-[85vw] sm:w-[350px] md:w-[400px] bg-brand-secondary rounded-2xl p-8 snap-center sm:snap-start border border-brand-border flex-shrink-0 flex flex-col justify-between">
-                            <div className="flex items-center gap-4 mb-6">
-                                <img
-                                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"
-                                    alt="Student"
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                />
-                                <div>
-                                    <h4 className="font-bold text-brand-text">
-                                        Priya Sharma
-                                    </h4>
-                                    <p className="text-sm text-brand-primary font-medium">
-                                        Certified Personal Trainer
-                                    </p>
+                        {reviews.map((review, index) => (
+                            <div
+                                key={index}
+                                className="w-[85vw] sm:w-[350px] md:w-[400px] bg-brand-secondary rounded-2xl p-8 snap-center sm:snap-start border border-brand-border flex-shrink-0 flex flex-col justify-between"
+                            >
+                                <div className="flex items-center gap-4 mb-6">
+                                    <img
+                                        src={review.img}
+                                        alt={review.name}
+                                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
+                                        onError={(e) => {
+                                            // fallback image if WebP not loaded/found
+                                            e.target.src = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80";
+                                        }}
+                                    />
+                                    <div>
+                                        <h4 className="font-bold text-brand-text">
+                                            {review.name}
+                                        </h4>
+                                        <p className="text-sm text-brand-primary font-medium">
+                                            Student
+                                        </p>
+                                    </div>
+                                </div>
+                                <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                                    "{review.text}"
+                                </p>
+                                <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
+                                    <Award className="w-4 h-4 text-brand-cta" />{" "}
+                                    Verified Review
                                 </div>
                             </div>
-                            <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                                "FGIIT completely changed my career trajectory.
-                                The practical hands-on sessions gave me the
-                                confidence to train clients professionally right
-                                after graduation."
-                            </p>
-                            <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                                <Award className="w-4 h-4 text-brand-cta" />{" "}
-                                Placed at Gold's Gym
-                            </div>
-                        </div>
-
-                        <div className="w-[85vw] sm:w-[350px] md:w-[400px] bg-brand-secondary rounded-2xl p-8 snap-center sm:snap-start border border-brand-border flex-shrink-0 flex flex-col justify-between">
-                            <div className="flex items-center gap-4 mb-6">
-                                <img
-                                    src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80"
-                                    alt="Student"
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                />
-                                <div>
-                                    <h4 className="font-bold text-brand-text">
-                                        Rahul Desai
-                                    </h4>
-                                    <p className="text-sm text-brand-primary font-medium">
-                                        Fitness Entrepreneur
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                                "The mentorship I received went beyond just
-                                fitness knowledge. They taught me the business
-                                aspect, which helped me launch my own successful
-                                online coaching platform."
-                            </p>
-                            <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                                <Award className="w-4 h-4 text-brand-cta" /> 50+
-                                Active Online Clients
-                            </div>
-                        </div>
-
-                        <div className="w-[85vw] sm:w-[350px] md:w-[400px] bg-brand-secondary rounded-2xl p-8 snap-center sm:snap-start border border-brand-border flex-shrink-0 flex flex-col justify-between">
-                            <div className="flex items-center gap-4 mb-6">
-                                <img
-                                    src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=100&q=80"
-                                    alt="Student"
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                />
-                                <div>
-                                    <h4 className="font-bold text-brand-text">
-                                        Anjali Menon
-                                    </h4>
-                                    <p className="text-sm text-brand-primary font-medium">
-                                        Strength & Conditioning Coach
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                                "Transitioning from a corporate job to fitness
-                                seemed scary, but the structured curriculum and
-                                expert faculty at FGIIT made the process
-                                seamless and educational."
-                            </p>
-                            <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                                <Award className="w-4 h-4 text-brand-cta" />{" "}
-                                Training State-Level Athletes
-                            </div>
-                        </div>
-                        <div className="w-[85vw] sm:w-[350px] md:w-[400px] bg-brand-secondary rounded-2xl p-8 snap-center sm:snap-start border border-brand-border flex-shrink-0 flex flex-col justify-between">
-                            <div className="flex items-center gap-4 mb-6">
-                                <img
-                                    src="https://images.unsplash.com/photo-1534339480783-6816b68be29c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGluZGlhbiUyMG1hbnxlbnwwfHwwfHx8MA%3D%3D"
-                                    alt="Student"
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                />
-                                <div>
-                                    <h4 className="font-bold text-brand-text">
-                                        Arjun Patel
-                                    </h4>
-                                    <p className="text-sm text-brand-primary font-medium">
-                                        Certified Fitness Coach
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                                "FGIIT gave me the confidence to turn my passion for fitness into a full-time career. The practical training and real-world client experience helped me start my own personal training business immediately after certification."
-                            </p>
-                            <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                                <Award className="w-4 h-4 text-brand-cta" />{" "}
-                                RUNNING A SUCCESSFUL PERSONAL TRAINING STUDIO
-                            </div>
-                        </div>
-                        <div className="w-[85vw] sm:w-[350px] md:w-[400px] bg-brand-secondary rounded-2xl p-8 snap-center sm:snap-start border border-brand-border flex-shrink-0 flex flex-col justify-between">
-                            <div className="flex items-center gap-4 mb-6">
-                                <img
-                                    src="https://plus.unsplash.com/premium_photo-1682089810582-f7b200217b67?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW5kaWFuJTIwd29tZW58ZW58MHx8MHx8fDA%3D"
-                                    alt="Student"
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                />
-                                <div>
-                                    <h4 className="font-bold text-brand-text">
-                                        Sneha Kulkarni
-                                    </h4>
-                                    <p className="text-sm text-brand-primary font-medium">
-                                        Nutrition & Fitness Coach
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                                "The course provided a perfect blend of fitness and nutrition education. Today, I help hundreds of clients achieve sustainable transformations through personalized coaching programs."
-                            </p>
-                            <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                                <Award className="w-4 h-4 text-brand-cta" />{" "}
-                                HELPED 300+ CLIENTS TRANSFORM THEIR HEALTH
-                            </div>
-                        </div>
-                        <div className="w-[85vw] sm:w-[350px] md:w-[400px] bg-brand-secondary rounded-2xl p-8 snap-center sm:snap-start border border-brand-border flex-shrink-0 flex flex-col justify-between">
-                            <div className="flex items-center gap-4 mb-6">
-                                <img
-                                    src="https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW5kaWFuJTIwbWFufGVufDB8fDB8fHww"
-                                    alt="Student"
-                                    className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-sm"
-                                />
-                                <div>
-                                    <h4 className="font-bold text-brand-text">
-                                        Vikram Singh
-                                    </h4>
-                                    <p className="text-sm text-brand-primary font-medium">
-                                        Strength & Conditioning Specialist
-                                    </p>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                                "What stood out most was the industry-focused curriculum and expert mentorship. FGIIT prepared me to work confidently with athletes and fitness enthusiasts from day one."
-                            </p>
-                            <div className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase">
-                                <Award className="w-4 h-4 text-brand-cta" />{" "}
-                                WORKING WITH PROFESSIONAL SPORTS TEAMS
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -1195,8 +1119,8 @@ export default function LandingPage() {
                 rel="noopener noreferrer"
                 className="fixed bottom-6 right-6 z-[90] bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 hover:shadow-[#25D366]/40 transition-all duration-300 group"
             >
-                
-                <svg className="w-7 h-7" fill="currentColor" width="24px" height="24px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><title>WhatsApp icon</title><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+
+                <svg className="w-7 h-7" fill="currentColor" width="24px" height="24px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><title>WhatsApp icon</title><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" /></svg>
             </a>
         </div>
     );

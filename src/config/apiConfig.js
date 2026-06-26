@@ -14,10 +14,10 @@ if (hostname === "demo-session.fggroup.in" || hostname === "www.demo-session.fgg
   baseUrl = "https://dev-api.fgiit.com";
   fwgBaseUrl = 'https://fg-app-dev-api.fgiit.com';
 } else {
-  //  baseUrl = "https://dev-api.fggroup.in";
-  baseUrl = 'http://localhost:80';
-  // fwgBaseUrl = 'https://fg-app-dev-api.fggroup.in';
-  fwgBaseUrl = 'http://localhost:82';
+  baseUrl = "https://dev-api.fggroup.in";
+  // baseUrl = 'http://localhost:80';
+  fwgBaseUrl = 'https://fg-app-dev-api.fggroup.in';
+  // fwgBaseUrl = 'http://localhost:82';
 }
 
 const apiConfig = {
