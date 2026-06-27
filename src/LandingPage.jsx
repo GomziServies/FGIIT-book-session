@@ -144,6 +144,55 @@ export default function LandingPage() {
             return;
         }
 
+        // Sanitize input data to prevent database errors and validation issues
+        const cleanMobile = (mobile) => {
+            if (!mobile) return "";
+            let cleaned = mobile.replace(/\D/g, "");
+            if (cleaned.length === 11 && cleaned.startsWith("0")) {
+                return cleaned.substring(1);
+            }
+            if (cleaned.length > 10 && cleaned.startsWith("91")) {
+                return cleaned.slice(-10);
+            }
+            return cleaned;
+        };
+
+        const sanitizedMobile = cleanMobile(formData.b_mobile);
+        const sanitizedEmail = formData.b_email ? formData.b_email.trim().toLowerCase() : "";
+        const sanitizedName = formData.b_name ? formData.b_name.trim() : "";
+        const sanitizedCity = formData.b_city ? formData.b_city.trim() : "";
+        // Clean URL to prevent URL parameters from exceeding database varchar limit
+        const sanitizedSource = (window.location.origin + window.location.pathname).substring(0, 255);
+
+        const sanitizedFormData = {
+            ...formData,
+            b_name: sanitizedName,
+            b_email: sanitizedEmail,
+            b_mobile: sanitizedMobile,
+            b_city: sanitizedCity,
+        };
+
+        // Retry helper to handle intermittent network drops when returning from UPI apps on mobile
+        const postWithRetry = async (url, data, maxRetries = 3, delayMs = 1500) => {
+            let attempt = 0;
+            while (attempt < maxRetries) {
+                try {
+                    return await publicAxiosInstance.post(url, data);
+                } catch (error) {
+                    attempt++;
+                    const isNetworkError = !error.response;
+                    const isServerError = error.response && error.response.status >= 500;
+                    
+                    if ((isNetworkError || isServerError) && attempt < maxRetries) {
+                        console.warn(`Booking API failed (Attempt ${attempt}/${maxRetries}). Retrying in ${delayMs}ms...`, error);
+                        await new Promise((resolve) => setTimeout(resolve, delayMs));
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+        };
+
         const options = {
             key: apiConfig.RAZORPAY_MERCHANT_ID, // RAZORPAY_FGIIT_KEY
             amount: 2700, // ₹27
@@ -152,14 +201,14 @@ export default function LandingPage() {
             description: "Demo Class Booking",
             image: fgiitLogo,
             handler: async function (response) {
+                const loadingToast = toast.loading("Confirming booking...");
                 try {
-                    const loadingToast = toast.loading("Confirming booking...");
-                    const res = await publicAxiosInstance.post(
+                    const res = await postWithRetry(
                         "/guest-payment/book-fgiit-demo",
                         {
                             payment_id: response.razorpay_payment_id,
-                            b_source: window.location.href,
-                            ...formData,
+                            b_source: sanitizedSource,
+                            ...sanitizedFormData,
                         },
                     );
                     toast.dismiss(loadingToast);
@@ -167,17 +216,20 @@ export default function LandingPage() {
                         setIsModalOpen(true);
                     }
                 } catch (error) {
-                    toast.dismiss();
+                    toast.dismiss(loadingToast);
+                    const serverErrorMsg = error.response?.data?.message || error.response?.data?.error || error.message;
                     toast.error(
-                        "Booking failed or verification error. Please contact support.",
+                        serverErrorMsg 
+                            ? `Booking failed: ${serverErrorMsg}. Please contact support.`
+                            : "Booking failed or verification error. Please contact support.",
                     );
-                    console.error(error);
+                    console.error("Booking verification failed:", error);
                 }
             },
             prefill: {
-                name: formData.b_name,
-                email: formData.b_email,
-                contact: formData.b_mobile,
+                name: sanitizedName,
+                email: sanitizedEmail,
+                contact: sanitizedMobile,
             },
             theme: {
                 color: "#cbe465",
