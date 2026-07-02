@@ -201,7 +201,9 @@ export default function LandingPage() {
             description: "Demo Class Booking",
             image: fgiitLogo,
             handler: async function (response) {
-                const loadingToast = toast.loading("Confirming booking...");
+                const loadingToast = toast.loading("Confirming booking (waiting 2.5s for payment status)...");
+                // Wait 2.5 seconds to let Razorpay process/capture the payment status before verification
+                await new Promise((resolve) => setTimeout(resolve, 2500));
                 try {
                     const res = await postWithRetry(
                         "/guest-payment/book-fgiit-demo",
@@ -218,10 +220,12 @@ export default function LandingPage() {
                 } catch (error) {
                     toast.dismiss(loadingToast);
                     const serverErrorMsg = error.response?.data?.message || error.response?.data?.error || error.message;
+                    const status = error.response?.status;
+                    const statusText = status ? ` (Status: ${status})` : "";
+                    
                     toast.error(
-                        serverErrorMsg 
-                            ? `Booking failed: ${serverErrorMsg}. Please contact support.`
-                            : "Booking failed or verification error. Please contact support.",
+                        `Booking failed: ${serverErrorMsg || 'Unknown verification error'}${statusText}. Please contact support. Info: ${sanitizedMobile}`,
+                        { duration: 10000 }
                     );
                     console.error("Booking verification failed:", error);
                 }
