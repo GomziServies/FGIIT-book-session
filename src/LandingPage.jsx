@@ -80,7 +80,7 @@ const reviews = [
   },
 ];
 
-export default function LandingPage() {
+export default function LandingPage () {
   const [scrolled, setScrolled] = useState(false);
   const carouselRef = React.useRef(null);
   const [step, setStep] = useState(1);
@@ -207,6 +207,16 @@ export default function LandingPage() {
       name: "FGIIT",
       description: "Demo Class Booking",
       image: fgiitLogo,
+      notes: {
+        b_name: sanitizedName,
+        b_email: sanitizedEmail,
+        b_mobile: sanitizedMobile,
+        b_city: sanitizedCity,
+        b_mode: formData.b_mode,
+        b_date: formData.b_date,
+        b_source: sanitizedSource,
+        webhook_handler: 'FWG_FITNESS_COURSE'
+      },
       handler: async function (response) {
         const loadingToast = toast.loading(
           "Confirming booking (waiting 2.5s for payment status)...",
@@ -433,8 +443,8 @@ export default function LandingPage() {
                   alt="Fitness instructor demonstrating exercise"
                   className="object-cover w-full h-full"
                   onError={(e) =>
-                    (e.target.src =
-                      "https://placehold.co/1200x1200/F8FCF9/1C1C1C?text=Professional+Learning+Environment")
+                  (e.target.src =
+                    "https://placehold.co/1200x1200/F8FCF9/1C1C1C?text=Professional+Learning+Environment")
                   }
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-brand-primary/20 to-transparent"></div>
