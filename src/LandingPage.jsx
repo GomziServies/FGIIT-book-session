@@ -215,7 +215,6 @@ export default function LandingPage () {
         b_mode: formData.b_mode,
         b_date: formData.b_date,
         b_source: sanitizedSource,
-        webhook_handler: 'FWG_FITNESS_COURSE'
       },
       handler: async function (response) {
         const loadingToast = toast.loading(
