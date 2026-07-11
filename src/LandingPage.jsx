@@ -27,6 +27,7 @@ import {
   Phone,
   ArrowLeft,
   FileCheck,
+  Calendar,
 } from "lucide-react";
 import fgiitLogo from "./assets/fgiit_logo.png";
 import heroImage from "./assets/hero.jpg";
@@ -642,18 +643,23 @@ export default function LandingPage () {
                     Choose Your Preferred Date
                   </h3>
                   <div className="mb-6">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                       Interactive Calendar
                     </label>
-                    <input
-                      type="date"
-                      name="b_date"
-                      value={formData.b_date}
-                      onChange={handleChange}
-                      min={today}
-                      required
-                      className="w-full px-4 py-3 sm:p-4 rounded-xl border-2 border-brand-border focus:ring-2 focus:ring-brand-cta focus:border-brand-cta transition-all outline-none text-brand-text font-bold bg-white text-base sm:text-lg"
-                    />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <Calendar className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        type="date"
+                        name="b_date"
+                        value={formData.b_date}
+                        onChange={handleChange}
+                        min={today}
+                        required
+                        className="block w-full min-w-0 appearance-none pl-11 pr-4 py-3 rounded-lg border border-brand-border focus:ring-2 focus:ring-brand-cta focus:border-brand-cta transition-all outline-none bg-gray-50 focus:bg-white min-h-[48px]"
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 mt-8">
                     <button
