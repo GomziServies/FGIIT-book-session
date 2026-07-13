@@ -96,6 +96,7 @@ export default function LandingPage () {
     b_time: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentCalendarDate, setCurrentCalendarDate] = useState(new Date());
 
   const totalSteps = 3;
 
@@ -303,7 +304,8 @@ export default function LandingPage () {
 
   const renderDate = () => {
     if (!formData.b_date) return "-";
-    const d = new Date(formData.b_date);
+    const [year, month, day] = formData.b_date.split("-").map(Number);
+    const d = new Date(year, month - 1, day);
     return d.toLocaleDateString("en-IN", {
       weekday: "short",
       year: "numeric",
@@ -312,7 +314,76 @@ export default function LandingPage () {
     });
   };
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = (() => {
+    const now = new Date();
+    // If it's 3:00 PM or later (15:00), shift the minimum allowed booking date to tomorrow
+    if (now.getHours() >= 15) {
+      now.setDate(now.getDate() + 1);
+    }
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  })();
+
+  const handlePrevMonth = () => {
+    setCurrentCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentCalendarDate((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
+  };
+
+  const isCurrentMonth = (() => {
+    const now = new Date();
+    return (
+      currentCalendarDate.getFullYear() === now.getFullYear() &&
+      currentCalendarDate.getMonth() === now.getMonth()
+    );
+  })();
+
+  const getCalendarDays = () => {
+    const year = currentCalendarDate.getFullYear();
+    const month = currentCalendarDate.getMonth();
+
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const prevDaysInMonth = new Date(year, month, 0).getDate();
+
+    const days = [];
+
+    // 1. Previous month's leading days
+    for (let i = firstDayIndex - 1; i >= 0; i--) {
+      days.push({
+        dayNum: prevDaysInMonth - i,
+        isCurrentMonth: false,
+        dateStr: "",
+      });
+    }
+
+    // 2. Current month's days
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      days.push({
+        dayNum: d,
+        isCurrentMonth: true,
+        dateStr,
+      });
+    }
+
+    // 3. Next month's trailing days
+    const totalGridCells = 42;
+    const nextDaysCount = totalGridCells - days.length;
+    for (let d = 1; d <= nextDaysCount; d++) {
+      days.push({
+        dayNum: d,
+        isCurrentMonth: false,
+        dateStr: "",
+      });
+    }
+
+    return days;
+  };
 
   return (
     <div className="min-h-screen">
@@ -643,22 +714,115 @@ export default function LandingPage () {
                     Choose Your Preferred Date
                   </h3>
                   <div className="mb-6">
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
                       Interactive Calendar
                     </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                        <Calendar className="h-5 w-5 text-gray-400" />
+
+                    {/* Selected Date Header Indicator */}
+                    <div className="mb-4 p-3 bg-brand-secondary rounded-xl border border-brand-border text-center text-sm font-bold text-brand-text flex items-center justify-center gap-2">
+                      <Calendar className="w-5 h-5 text-brand-cta" />
+                      {formData.b_date ? (
+                        <span>
+                          Selected Date:{" "}
+                          <span className="text-brand-cta font-extrabold">
+                            {renderDate()}
+                          </span>
+                        </span>
+                      ) : (
+                        <span className="text-gray-500">
+                          Please select a preferred date below
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Custom Calendar Body */}
+                    <div className="bg-white border border-brand-border rounded-2xl p-4 shadow-sm">
+                      <div className="flex justify-between items-center mb-4">
+                        <button
+                          type="button"
+                          onClick={handlePrevMonth}
+                          disabled={isCurrentMonth}
+                          className={`p-2 rounded-lg border border-brand-border flex items-center justify-center transition-colors ${
+                            isCurrentMonth
+                              ? "opacity-30 cursor-not-allowed"
+                              : "hover:bg-brand-alternate text-brand-text"
+                          }`}
+                        >
+                          <ChevronLeft className="w-5 h-5" />
+                        </button>
+                        <span className="font-extrabold text-brand-text text-base">
+                          {currentCalendarDate.toLocaleString("en-IN", { month: "long" })}{" "}
+                          {currentCalendarDate.getFullYear()}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleNextMonth}
+                          className="p-2 rounded-lg border border-brand-border flex items-center justify-center transition-colors hover:bg-brand-alternate text-brand-text"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </button>
                       </div>
-                      <input
-                        type="date"
-                        name="b_date"
-                        value={formData.b_date}
-                        onChange={handleChange}
-                        min={today}
-                        required
-                        className="block w-full min-w-0 appearance-none pl-11 pr-4 py-3 rounded-lg border border-brand-border focus:ring-2 focus:ring-brand-cta focus:border-brand-cta transition-all outline-none bg-gray-50 focus:bg-white min-h-[48px]"
-                      />
+
+                      <div className="grid grid-cols-7 gap-1 text-center font-bold text-xs text-gray-400 mb-2">
+                        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((dayName) => (
+                          <div key={dayName} className="py-1">
+                            {dayName}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="grid grid-cols-7 gap-1.5 text-center">
+                        {getCalendarDays().map((dayObj, index) => {
+                          const { dayNum, isCurrentMonth: isInMonth, dateStr } = dayObj;
+
+                          if (!isInMonth) {
+                            return (
+                              <div
+                                key={`empty-${index}`}
+                                className="aspect-square flex items-center justify-center text-xs text-gray-300 font-medium select-none pointer-events-none"
+                              >
+                                {dayNum}
+                              </div>
+                            );
+                          }
+
+                          const isSelected = dateStr === formData.b_date;
+                          const isPast = dateStr < today;
+
+                          return (
+                            <button
+                              key={`day-${dateStr}`}
+                              type="button"
+                              onClick={() => {
+                                if (!isPast) {
+                                  setFormData((prev) => ({ ...prev, b_date: dateStr }));
+                                }
+                              }}
+                              disabled={isPast}
+                              className={`
+                                aspect-square w-full rounded-full text-sm font-semibold flex items-center justify-center transition-all duration-200 outline-none
+                                ${
+                                  isSelected
+                                    ? "bg-brand-cta text-white shadow-md shadow-brand-cta/25 font-bold scale-105"
+                                    : ""
+                                }
+                                ${
+                                  !isSelected && !isPast
+                                    ? "text-brand-text hover:bg-brand-alternate hover:text-brand-text hover:scale-105"
+                                    : ""
+                                }
+                                ${
+                                  isPast
+                                    ? "text-gray-300 line-through cursor-not-allowed pointer-events-none"
+                                    : ""
+                                }
+                              `}
+                            >
+                              {dayNum}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 mt-8">
